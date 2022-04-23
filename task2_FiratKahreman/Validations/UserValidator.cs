@@ -1,4 +1,5 @@
 ﻿using FluentValidation;
+using System.Text.RegularExpressions;
 using task2_FiratKahreman.Models;
 
 namespace task2_FiratKahreman.Validations
@@ -11,9 +12,19 @@ namespace task2_FiratKahreman.Validations
             RuleFor(a => a.Surname).NotEmpty().WithMessage("İsim boş bırakılamaz!");
             RuleFor(a => a.Mail).NotEmpty().WithMessage("Mail boş bırakılamaz!")
                 .EmailAddress();
-            RuleFor(a => a.Password).NotEmpty().MinimumLength(8)//!!!!!!!!!!!!!!!;
-            RuleFor(a => a.RePassword).Equal(a => a.RePassword).WithMessage("Girilen şifreler aynı olmalıdır!");
+            RuleFor(a => a.Password).NotEmpty()
+                .Must(IsPasswordValid)
+                .WithMessage("Şifre en az 8 karakter, harf ve sayı içermelidir!");
+            RuleFor(a => a.RePassword)
+                .Equal(a => a.RePassword).WithMessage("Girilen şifreler aynı olmalıdır!");
             RuleFor(a => a.Role).NotEmpty().WithMessage("Lütfen üye tipini seçiniz.");
+
+            
+        }
+        private bool IsPasswordValid(string arg)
+        {
+            Regex regex = new Regex(@"^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$");
+            return regex.IsMatch(arg);
         }
     }
 }
