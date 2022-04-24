@@ -11,7 +11,7 @@ namespace task2_FiratKahreman.Controllers
     [ApiController]
     public class ActivitiesController : ControllerBase
     {
-        //Katılımcılar görecek
+        //Katılımcılar görecek OK
         [HttpGet]
         public IActionResult GetActivities()
         {
@@ -32,16 +32,37 @@ namespace task2_FiratKahreman.Controllers
             return Ok(activities);
         }
 
-        //Firmalar kendine tanımlıysa görecek
-
-        //Listeleme (Filtrelenebilir)
-
-        //Firmalar xml json çekebilir (log kaydı al)
+        //Firmalar kendine tanımlıysa görecek OK
+        [HttpGet("{id}")]
+        public IActionResult GetActivitiesByCompanyId(int id)
+        {
+            using (var context = new EventContext())
+            {
+                var query = (from c in context.Activities where c.CompanyId == id select c);
+                return Ok(query);
+            }
+        }
         
-        //Katılıyorum Katılmıyorum
-        //Biletli Etkinlikse yönlendir
+        //Katılımcı katılıyorum derse:
+        [HttpGet("{id}")]
+        public IActionResult Attend(int id)
+        {
 
-        //İade
+            return Ok("link");
+        }
+        
+        //Listeleme (Filtrelenebilir)
+        public IActionResult GetListByCity(string city)
+        {
+            return Ok();
+        }
+
+        public IActionResult Refund()
+        {
+            return Ok();
+        }
+        //Firmalar xml json çekebilir (log kaydı al)
+
 
     }
 }
