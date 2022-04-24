@@ -11,6 +11,7 @@ namespace task2_FiratKahreman.Controllers
         [HttpGet("{id}")]
         public IActionResult Attend(int id)
         {
+
             //Kontenjan doluysa uyar
             //
             return Ok("biletliyse link");

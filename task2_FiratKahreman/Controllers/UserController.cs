@@ -11,7 +11,7 @@ namespace task2_FiratKahreman.Controllers
     [ApiController]
     public class UserController : ControllerBase
     {
-        //Login
+        
         [HttpPost]
         public IActionResult SignUp(User user)
         {
@@ -19,20 +19,62 @@ namespace task2_FiratKahreman.Controllers
             {
                 var newuser = context.Add(user);
                 context.SaveChanges();
+                return Ok();
             }
-            return Ok();
+            
         }
 
-        public IActionResult Login(User user)
+        [HttpGet]
+        public IActionResult Login(string mail, string password)
         {
             using (var context = new EventContext())
             {
-                List<UserLoginDTO> newuser = context.Users.Select(c => new UserLoginDTO() { LoginMail = c.Mail, LoginPassword = c.Password }).ToList();                                                      
+                var query = from a in context.Users
+                where a.Mail == mail
+                 && a.Password == password
+                select a;
 
-            }
-            return Ok();
+                if(query.Any())
+                {
+                    return Ok("Giriş Başarılı");
+                }
+                else
+                {
+                    return BadRequest("Hatalı giriş");
+                }
+            }            
         }
 
-        //Sign Up
+        [HttpGet]
+        public IActionResult CompanySignUp(Company company)
+        {
+            using (var context = new EventContext())
+            {
+                var newcompanyuser = context.Add(company);
+                context.SaveChanges();
+                return Ok();
+            }
+            
+        }
+
+        public IActionResult CompanyLogin(string mail, string password)
+        {
+            using (var context = new EventContext())
+            {
+                var query = (from a in context.Companies
+                            where a.CompanyMail == mail
+                             && a.CompanyPassword == password
+                            select a);
+
+                if (query != null)
+                {
+                    return Ok("Şirket girişi Başarılı");
+                }
+                else
+                {
+                    return BadRequest("Hatalı giriş");
+                }
+            }
+        }
     }
 }

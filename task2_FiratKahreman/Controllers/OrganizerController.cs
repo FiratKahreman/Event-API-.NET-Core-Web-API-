@@ -18,5 +18,7 @@ namespace task2_FiratKahreman.Controllers
             return Ok();
         }
         //Etkinlik Düzenleme
+
+        public IActionResult EditEvent
     }
 }
