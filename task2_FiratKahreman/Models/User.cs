@@ -1,4 +1,6 @@
-﻿namespace task2_FiratKahreman.Models
+﻿using System.Collections.Generic;
+
+namespace task2_FiratKahreman.Models
 {
     public class User
     {
@@ -9,5 +11,7 @@
         public string Password { get; set; }
         public string RePassword { get; set; }
         public string Role { get; set; } //!!!
+
+        public List<Activity> Activities { get; set; }
     }
 }

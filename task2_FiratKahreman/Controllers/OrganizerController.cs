@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using task2_FiratKahreman.Models;
 
 namespace task2_FiratKahreman.Controllers
 {
@@ -8,7 +9,14 @@ namespace task2_FiratKahreman.Controllers
     public class OrganizerController : ControllerBase
     {
         //Etkinlik tanımlama
-
+        [HttpPost]
+        public IActionResult AddEvent(Activity activity)
+        {
+            EventContext context = new EventContext();
+            context.Activities.Add(activity);
+            context.SaveChanges();
+            return Ok();
+        }
         //Etkinlik Düzenleme
     }
 }

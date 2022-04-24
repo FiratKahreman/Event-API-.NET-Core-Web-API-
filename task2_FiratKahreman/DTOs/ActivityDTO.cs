@@ -1,9 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
 
-namespace task2_FiratKahreman.Models
+namespace task2_FiratKahreman.DTOs
 {
-    public class Activity
+    public class ActivityDTO
     {
         public int ActivityId { get; set; }
         public string ActivityName { get; set; }
@@ -13,15 +12,8 @@ namespace task2_FiratKahreman.Models
         public string Adress { get; set; }
         public int Limit { get; set; }
         public bool NeedTicket { get; set; }
-        public int CompanyId { get; set; }
         public int? TicketPrice { get; set; }
-        public int CategoryId { get; set; }
-        public int CityId { get; set; }
-
-        public City City { get; set; }
-        public Category Category { get; set; }
-        public List<User> ActivitiesUsers { get; set; }
-        public List<Company> Companies { get; set; }
-        
+        public string Category { get; set; }
+        public string City { get; set; }
     }
 }

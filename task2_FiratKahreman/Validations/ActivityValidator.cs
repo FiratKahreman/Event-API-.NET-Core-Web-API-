@@ -11,7 +11,7 @@ namespace task2_FiratKahreman.Validations
             RuleFor(a => a.Description).NotEmpty().WithMessage("Açıklama boş bırakılamaz!");
             RuleFor(a => a.Adress).NotEmpty().WithMessage("Adres boş bırakılamaz!");
             RuleFor(a => a.Limit).NotEmpty().WithMessage("Kontenjan boş bırakılamaz!");
-            RuleFor(a => a.City).NotEmpty().WithMessage("Şehir boş bırakılamaz!");
+            //RuleFor(a => a.City).NotEmpty().WithMessage("Şehir boş bırakılamaz!");
             RuleFor(a => a.NeedTicket).NotEmpty().WithMessage("Etkinliğin biletli mi biletsiz mi olacağını seçiniz!");
             RuleFor(a => a.TicketPrice).NotEmpty().WithMessage("Biletli etkinliklerde bilet fiyatı boş bırakılamaz!").When(a => a.NeedTicket == true);
         }
