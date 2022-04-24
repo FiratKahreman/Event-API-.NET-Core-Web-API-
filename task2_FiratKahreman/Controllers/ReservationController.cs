@@ -5,7 +5,7 @@ namespace task2_FiratKahreman.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class ReservationController : ControllerBase
+    public class ReservationController : ControllerBase 
     {
         //Etkinlik seç katılıyorum de, kontenjan doluysa uyar
 

@@ -10,8 +10,8 @@ namespace task2_FiratKahreman.Validations
         {
             RuleFor(a => a.Name).NotEmpty().WithMessage("İsim boş bırakılamaz!");
             RuleFor(a => a.Surname).NotEmpty().WithMessage("İsim boş bırakılamaz!");
-            RuleFor(a => a.Mail).NotEmpty().WithMessage("Mail boş bırakılamaz!")
-                .EmailAddress();
+            RuleFor(a => a.Mail)
+                .EmailAddress().WithMessage("Mail boş bırakılamaz!").When(a => !string.IsNullOrEmpty(a.Mail));
             RuleFor(a => a.Password).NotEmpty()
                 .Must(IsPasswordValid)
                 .WithMessage("Şifre en az 8 karakter, harf ve sayı içermelidir!");

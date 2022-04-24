@@ -1,6 +1,8 @@
-﻿namespace task2_FiratKahreman.Models
+﻿
+namespace task2_FiratKahreman.Models
 {
     public class Context
     {
+        
     }
 }
