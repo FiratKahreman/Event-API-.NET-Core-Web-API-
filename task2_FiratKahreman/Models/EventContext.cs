@@ -11,7 +11,8 @@ namespace task2_FiratKahreman.Models
         public DbSet<Category> Categories { get; set; }
         public DbSet<City> Cities { get; set; }
         public DbSet<Company> Companies { get; set; }
-        public DbSet<User> Users { get; set; }       
+        public DbSet<User> Users { get; set; }  
+        public DbSet<Role> Roles { get; set; }
         
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

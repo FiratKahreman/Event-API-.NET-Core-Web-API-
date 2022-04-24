@@ -43,13 +43,8 @@ namespace task2_FiratKahreman.Controllers
             }
         }
         
-        //Katılımcı katılıyorum derse:
-        [HttpGet("{id}")]
-        public IActionResult Attend(int id)
-        {
-
-            return Ok("link");
-        }
+        
+        
         
         //Listeleme (Filtrelenebilir)
         public IActionResult GetListByCity(string city)
@@ -57,8 +52,21 @@ namespace task2_FiratKahreman.Controllers
             return Ok();
         }
 
-        public IActionResult Refund()
+        public IActionResult CancelEvent()
         {
+            //5 Gün Kalana kadar
+            return Ok();
+        }
+
+        public IActionResult EditLimit()
+        {
+            //5 GÜN KALANA KADAR
+            return Ok();
+        }
+
+        public IActionResult EditAdress()
+        {
+            //5 GÜN KALANA KADAR
             return Ok();
         }
         //Firmalar xml json çekebilir (log kaydı al)
