@@ -41,7 +41,7 @@ namespace task2_FiratKahreman.Models
         {
             if (!optionsBuilder.IsConfigured)
             {
-                optionsBuilder.UseSqlServer("Server=(localdb)/Firat;Database=EventDb;Trusted_Connection=True;");
+                optionsBuilder.UseSqlServer("Server=(localdb)\\Firat;Database=EventDb;Trusted_Connection=True;");
             }
         }
     }
