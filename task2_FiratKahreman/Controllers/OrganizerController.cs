@@ -20,6 +20,6 @@ namespace task2_FiratKahreman.Controllers
         //Etkinlik Düzenleme
 
         
-        //public IActionResult EditEvent
+        
     }
 }

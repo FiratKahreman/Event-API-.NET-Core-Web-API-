@@ -5,17 +5,18 @@ using System;
 using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
+using System.Security.Claims;
 using task2_FiratKahreman.DTOs;
 using task2_FiratKahreman.Models;
 
 
 namespace task2_FiratKahreman.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/[controller]/[action]")]
     [ApiController]
     public class UserController : ControllerBase
     {
-        
+
         [HttpPost]
         public IActionResult SignUp(User user)
         {
@@ -25,34 +26,49 @@ namespace task2_FiratKahreman.Controllers
                 context.SaveChanges();
                 return Ok();
             }
-            
+
         }
 
         [HttpGet]
-        public IActionResult Login(string mail, string password)
+        public IActionResult Login(string mail, string password, bool isOrganizer)
         {
             using (var context = new EventContext())
             {
                 var query = from a in context.Users
-                where a.Mail == mail
-                 && a.Password == password
-                select a;
+                            where a.Mail == mail
+                             && a.Password == password
+                             && a.IsOrganizer == isOrganizer
+                            select a;
 
-                if(query.Any())
-                {
+                if (query.Any())
+                {                                                         
+                    List<Claim> claims = new List<Claim>();
+                    claims.Add(new Claim(JwtRegisteredClaimNames.Email, mail));
+                    claims.Add(new Claim(ClaimTypes.Role, isOrganizer?"Organizer":"User"));                  
+                    
                     JwtSecurityTokenHandler tokenHandler = new JwtSecurityTokenHandler();
                     SymmetricSecurityKey key = new SymmetricSecurityKey(Convert.FromBase64String
                         ("dandanlangididandansamsakdovecii"));
-                    return Ok("Giriş Başarılı");
+                    SigningCredentials signingCredentials = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
+                    JwtSecurityToken token = new JwtSecurityToken(
+                        issuer: "www.etkinlik.com",
+                        audience: "www.etkinlik.com",
+                        signingCredentials: signingCredentials,
+                        expires: DateTime.Now.AddHours(2),
+                        claims: claims
+                        );
+                    string userToken = tokenHandler.WriteToken(token);
+
+                    return Ok(userToken);
                 }
                 else
                 {
-                    return BadRequest("Hatalı giriş");
+                    return NotFound("Girilen mail veya şifre yanlış");
                 }
-            }            
+            }
         }
 
-        [HttpGet]
+        [HttpPost]
         public IActionResult CompanySignUp(Company company)
         {
             using (var context = new EventContext())
@@ -61,25 +77,42 @@ namespace task2_FiratKahreman.Controllers
                 context.SaveChanges();
                 return Ok();
             }
-            
+
         }
 
+        [HttpGet]
         public IActionResult CompanyLogin(string mail, string password)
         {
             using (var context = new EventContext())
             {
                 var query = (from a in context.Companies
-                            where a.CompanyMail == mail
-                             && a.CompanyPassword == password
-                            select a);
+                             where a.CompanyMail == mail
+                              && a.CompanyPassword == password
+                             select a);
 
                 if (query != null)
                 {
-                    return Ok("Şirket girişi Başarılı");
+                    List<Claim> claims = new List<Claim>();
+                    claims.Add(new Claim(JwtRegisteredClaimNames.Email, mail));
+                    claims.Add(new Claim(ClaimTypes.Role, "Company"));
+
+                    JwtSecurityTokenHandler tokenHandler = new JwtSecurityTokenHandler();
+                    SymmetricSecurityKey key = new SymmetricSecurityKey(Convert.FromBase64String
+                        ("dandanlangididandansamsakdovecii"));
+                    SigningCredentials signingCredentials = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
+                    JwtSecurityToken token = new JwtSecurityToken(
+                        issuer: "www.etkinlik.com",
+                        audience: "www.etkinlik.com",
+                        signingCredentials: signingCredentials,
+                        expires: DateTime.Now.AddHours(2),
+                        claims: claims
+                        );
+                    string userToken = tokenHandler.WriteToken(token);
+                    return Ok(token);
                 }
                 else
                 {
-                    return BadRequest("Hatalı giriş");
+                    return BadRequest("Girilen mail veya şifre yanlış");
                 }
             }
         }

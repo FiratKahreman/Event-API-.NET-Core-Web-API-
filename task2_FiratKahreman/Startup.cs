@@ -18,11 +18,11 @@ namespace task2_FiratKahreman
 {
     public class Startup
     {
-        public IConfiguration Configuration { get; set; }
+        public IConfiguration _configuration { get; set; }
 
         public Startup(IConfiguration configuration)
         {
-            Configuration = configuration;
+            _configuration = configuration;
         }
         
         public void ConfigureServices(IServiceCollection services)
@@ -39,12 +39,12 @@ namespace task2_FiratKahreman
                         ValidateAudience = true,
                         ValidateIssuer = true, //Hata verebilir!
                         IssuerSigningKey = new SymmetricSecurityKey(Convert.FromBase64String
-                        ("dandanlangididandansamsakdovecii"))
+                        (_configuration["JwtOptions:key"]))
                     };
                 });
             services.AddDbContext<EventContext>(options =>
             {
-                options.UseSqlServer(Configuration.GetConnectionString("MsSQLConnection"));
+                options.UseSqlServer(_configuration.GetConnectionString("MsSQLConnection"));
             }
             );
         }

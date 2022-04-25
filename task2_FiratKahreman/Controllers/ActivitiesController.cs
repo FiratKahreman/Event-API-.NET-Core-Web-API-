@@ -1,5 +1,7 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using task2_FiratKahreman.DTOs;
@@ -13,6 +15,7 @@ namespace task2_FiratKahreman.Controllers
     {
         //Katılımcılar görecek OK
         [HttpGet]
+        [Authorize(Roles = "User")]
         public IActionResult GetActivities()
         {
             EventContext context = new EventContext();
@@ -34,6 +37,7 @@ namespace task2_FiratKahreman.Controllers
 
         //Firmalar kendine tanımlıysa görecek OK
         [HttpGet("{id}")]
+        [Authorize(Roles = "Company")]
         public IActionResult GetActivitiesByCompanyId(int id)
         {
             using (var context = new EventContext())
@@ -42,32 +46,90 @@ namespace task2_FiratKahreman.Controllers
                 return Ok(query);
             }
         }
-        
-        
-        
-        
-        //Listeleme (Filtrelenebilir)
-        public IActionResult GetListByCity(string city)
+             
+                
+       
+        [HttpGet("{id}")]
+        [Authorize(Roles = "User")]
+        public IActionResult GetListByCity(int cityId)
         {
-            return Ok();
+            using (var context = new EventContext())
+            {
+                var query = (from c in context.Activities where c.CityId == cityId select c);
+                return Ok(query);
+            }
+        }
+        
+        [HttpGet("{id}")]
+        [Authorize(Roles = "User")]
+        public IActionResult GetListByCategory(int categoryId)
+        {
+            using (var context = new EventContext())
+            {
+                var query = (from c in context.Activities where c.CategoryId == categoryId select c);
+                return Ok(query);
+            }
         }
 
-        public IActionResult CancelEvent()
+        [HttpGet]
+        [Authorize(Roles = "Organizer")]
+        public IActionResult CancelEvent(int eventId)
         {
-            //5 Gün Kalana kadar
-            return Ok();
+            using (var context = new EventContext())
+            {                
+                var query = (from c in context.Activities where c.ActivityId == eventId && c.ActivityDate <= DateTime.Now.AddDays(-5) select c);
+                if (query.Any())
+                {
+                    Activity activity = context.Activities.SingleOrDefault(a => a.ActivityId == eventId);
+                    context.Activities.Remove(activity);
+                    context.SaveChanges();
+                    return Ok();
+                }
+                else
+                {
+                    return BadRequest("Bu id değerine sahip bir etkinlik yok veya etkinliğin başlamasına 5 günden az kaldı.");
+                }
+            }
         }
 
-        public IActionResult EditLimit()
+        [HttpGet]
+        [Authorize(Roles = "Organizer")]
+        public IActionResult EditLimit(int eventId, Activity activity)
         {
-            //5 GÜN KALANA KADAR
-            return Ok();
+            using (var context = new EventContext())
+            {
+                var query = (from c in context.Activities where c.ActivityId == eventId && c.ActivityDate <= DateTime.Now.AddDays(-5) select c);
+                if (query.Any())
+                {
+                    Activity original = context.Activities.SingleOrDefault(a => a.ActivityId == eventId);                    
+                    original.Limit = activity.Limit;
+                    context.SaveChanges();
+                    return Ok();
+                }
+                else
+                {
+                    return BadRequest("Bu id değerine sahip bir etkinlik yok veya etkinliğin başlamasına 5 günden az kaldı.");
+                }
+            }
         }
 
-        public IActionResult EditAdress()
+        public IActionResult EditAdress(int eventId, Activity activity)
         {
-            //5 GÜN KALANA KADAR
-            return Ok();
+            using (var context = new EventContext())
+            {
+                var query = (from c in context.Activities where c.ActivityId == eventId && c.ActivityDate <= DateTime.Now.AddDays(-5) select c);
+                if (query.Any())
+                {
+                    Activity original = context.Activities.SingleOrDefault(a => a.ActivityId == eventId);
+                    original.Adress = activity.Adress;
+                    context.SaveChanges();
+                    return Ok();
+                }
+                else
+                {
+                    return BadRequest("Bu id değerine sahip bir etkinlik yok veya etkinliğin başlamasına 5 günden az kaldı.");
+                }
+            }
         }
         //Firmalar xml json çekebilir (log kaydı al)
 
