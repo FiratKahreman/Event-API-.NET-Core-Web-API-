@@ -1,4 +1,5 @@
 using FluentValidation.AspNetCore;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -6,6 +7,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.IdentityModel.Tokens;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -25,9 +27,21 @@ namespace task2_FiratKahreman
         
         public void ConfigureServices(IServiceCollection services)
         {
-            services
-                .AddControllers()
-                .AddFluentValidation(a => a.RegisterValidatorsFromAssemblyContaining<Startup>());
+            services.AddControllers();
+            services.AddFluentValidation(a => a.RegisterValidatorsFromAssemblyContaining<Startup>());
+            services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+                .AddJwtBearer(options =>
+                {
+                    options.TokenValidationParameters = new TokenValidationParameters()
+                    {
+                        ValidAudience = "www.etkinlik.com",
+                        ValidIssuer = "www.etkinlik.com",
+                        ValidateAudience = true,
+                        ValidateIssuer = true, //Hata verebilir!
+                        IssuerSigningKey = new SymmetricSecurityKey(Convert.FromBase64String
+                        ("dandanlangididandansamsakdovecii"))
+                    };
+                });
             services.AddDbContext<EventContext>(options =>
             {
                 options.UseSqlServer(Configuration.GetConnectionString("MsSQLConnection"));
@@ -41,8 +55,11 @@ namespace task2_FiratKahreman
             {
                 app.UseDeveloperExceptionPage();
             }
+            app.UseAuthentication();
 
             app.UseRouting();
+
+            app.UseAuthorization();
 
             app.UseEndpoints(endpoints => endpoints.MapControllers());
         }

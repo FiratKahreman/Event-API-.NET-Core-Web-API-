@@ -1,9 +1,13 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.IdentityModel.Tokens;
+using System;
 using System.Collections.Generic;
+using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using task2_FiratKahreman.DTOs;
 using task2_FiratKahreman.Models;
+
 
 namespace task2_FiratKahreman.Controllers
 {
@@ -36,6 +40,9 @@ namespace task2_FiratKahreman.Controllers
 
                 if(query.Any())
                 {
+                    JwtSecurityTokenHandler tokenHandler = new JwtSecurityTokenHandler();
+                    SymmetricSecurityKey key = new SymmetricSecurityKey(Convert.FromBase64String
+                        ("dandanlangididandansamsakdovecii"));
                     return Ok("Giriş Başarılı");
                 }
                 else
