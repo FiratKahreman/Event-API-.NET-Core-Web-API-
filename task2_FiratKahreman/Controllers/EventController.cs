@@ -11,12 +11,12 @@ namespace task2_FiratKahreman.Controllers
 {
     [Route("api/[controller]/[action]")]
     [ApiController]
-    public class ActivitiesController : ControllerBase
+    public class EventController : ControllerBase
     {
-        //Katılımcılar görecek OK
+        
         [HttpGet]
         [Authorize(Roles = "User")]
-        public IActionResult GetActivities()
+        public IActionResult GetEvents()
         {
             EventContext context = new EventContext();
             List<ActivityDTO> activities = context.Activities
@@ -35,19 +35,16 @@ namespace task2_FiratKahreman.Controllers
             return Ok(activities);
         }
 
-        //Firmalar kendine tanımlıysa görecek OK
         [HttpGet("{id}")]
         [Authorize(Roles = "Company")]
-        public IActionResult GetActivitiesByCompanyId(int id)
+        public IActionResult GetEventsByCompanyId(int id)
         {
             using (var context = new EventContext())
             {
-                var query = (from c in context.Activities where c.CompanyId == id select c);
+                var query = (from c in context.Activities where c.CompanyId == id select c).ToList();
                 return Ok(query);
             }
-        }
-             
-                
+        }                
        
         [HttpGet("{id}")]
         [Authorize(Roles = "User")]
@@ -55,7 +52,7 @@ namespace task2_FiratKahreman.Controllers
         {
             using (var context = new EventContext())
             {
-                var query = (from c in context.Activities where c.CityId == cityId select c);
+                var query = (from c in context.Activities where c.CityId == cityId select c).ToList();
                 return Ok(query);
             }
         }
@@ -66,8 +63,20 @@ namespace task2_FiratKahreman.Controllers
         {
             using (var context = new EventContext())
             {
-                var query = (from c in context.Activities where c.CategoryId == categoryId select c);
+                var query = (from c in context.Activities where c.CategoryId == categoryId select c).ToList();
                 return Ok(query);
+            }
+        }
+
+        [HttpPost]
+        [Authorize(Roles = "Organizer")]
+        public IActionResult AddEvent(Activity activity)
+        {
+            using (var context = new EventContext())
+            {
+                context.Activities.Add(activity);
+                context.SaveChanges();
+                return Ok();
             }
         }
 
@@ -77,8 +86,9 @@ namespace task2_FiratKahreman.Controllers
         {
             using (var context = new EventContext())
             {                
-                var query = (from c in context.Activities where c.ActivityId == eventId && c.ActivityDate <= DateTime.Now.AddDays(-5) select c);
-                if (query.Any())
+                var query = (from c in context.Activities where c.ActivityId == eventId && c.ActivityDate >= DateTime.Now.AddDays(5) select c);
+                
+                if (query != null)
                 {
                     Activity activity = context.Activities.SingleOrDefault(a => a.ActivityId == eventId);
                     context.Activities.Remove(activity);
@@ -98,8 +108,8 @@ namespace task2_FiratKahreman.Controllers
         {
             using (var context = new EventContext())
             {
-                var query = (from c in context.Activities where c.ActivityId == eventId && c.ActivityDate <= DateTime.Now.AddDays(-5) select c);
-                if (query.Any())
+                var query = (from c in context.Activities where c.ActivityId == eventId && c.ActivityDate >= DateTime.Now.AddDays(5) select c);
+                if (query != null)
                 {
                     Activity original = context.Activities.SingleOrDefault(a => a.ActivityId == eventId);                    
                     original.Limit = activity.Limit;
@@ -113,12 +123,14 @@ namespace task2_FiratKahreman.Controllers
             }
         }
 
+        [HttpGet]
+        [Authorize(Roles = "Organizer")]
         public IActionResult EditAdress(int eventId, Activity activity)
         {
             using (var context = new EventContext())
             {
                 var query = (from c in context.Activities where c.ActivityId == eventId && c.ActivityDate <= DateTime.Now.AddDays(-5) select c);
-                if (query.Any())
+                if (query != null)
                 {
                     Activity original = context.Activities.SingleOrDefault(a => a.ActivityId == eventId);
                     original.Adress = activity.Adress;
@@ -131,6 +143,7 @@ namespace task2_FiratKahreman.Controllers
                 }
             }
         }
+
         //Firmalar xml json çekebilir (log kaydı al)
 
 

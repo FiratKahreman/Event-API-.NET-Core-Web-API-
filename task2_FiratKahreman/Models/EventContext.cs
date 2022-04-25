@@ -11,8 +11,7 @@ namespace task2_FiratKahreman.Models
         public DbSet<Category> Categories { get; set; }
         public DbSet<City> Cities { get; set; }
         public DbSet<Company> Companies { get; set; }
-        public DbSet<User> Users { get; set; }  
-        public DbSet<Role> Roles { get; set; }
+        public DbSet<User> Users { get; set; }
         
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -30,7 +29,7 @@ namespace task2_FiratKahreman.Models
                 .WithMany(b => b.CompanyActivities);
 
                 entity.HasMany(a => a.AttendedUsers)
-                .WithMany(b => b.AttendedActivities);
+                .WithMany(b => b.AttendedActivities);                
             });
 
 
@@ -38,10 +37,6 @@ namespace task2_FiratKahreman.Models
             {
                 entity.HasMany(a => a.AttendedActivities)
                 .WithMany(b => b.AttendedUsers);
-
-                entity.HasOne(a => a.Role)
-                .WithMany(b => b.RoleUsers)
-                .HasForeignKey(a => a.RoleId);
             });
         }
 

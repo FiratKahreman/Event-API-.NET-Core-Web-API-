@@ -40,7 +40,7 @@ namespace task2_FiratKahreman.Controllers
                              && a.IsOrganizer == isOrganizer
                             select a;
 
-                if (query.Any())
+                if (query != null)
                 {                                                         
                     List<Claim> claims = new List<Claim>();
                     claims.Add(new Claim(JwtRegisteredClaimNames.Email, mail));
