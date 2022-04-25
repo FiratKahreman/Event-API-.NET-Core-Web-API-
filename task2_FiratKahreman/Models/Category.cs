@@ -7,6 +7,6 @@ namespace task2_FiratKahreman.Models
         public int CategoryId { get; set; }
         public string CategoryName { get; set; }
 
-        public List<Activity> ActivitiesCategories { get; set; }
+        public List<Activity> CategoryActivities { get; set; }
     }
 }

@@ -19,22 +19,29 @@ namespace task2_FiratKahreman.Models
             modelBuilder.Entity<Activity>(entity =>
             {
                 entity.HasOne(a => a.Category)
-                .WithMany(b => b.ActivitiesCategories)
+                .WithMany(b => b.CategoryActivities)
                 .HasForeignKey(a => a.CategoryId);
 
                 entity.HasOne(a => a.City)
-                .WithMany(b => b.ActivitiesCities)
+                .WithMany(b => b.CityActivities)
                 .HasForeignKey(a => a.CityId);
 
-                entity.HasMany(a => a.Companies)
+                entity.HasMany(a => a.SellerCompanies)
                 .WithMany(b => b.CompanyActivities);
+
+                entity.HasMany(a => a.AttendedUsers)
+                .WithMany(b => b.AttendedActivities);
             });
 
 
             modelBuilder.Entity<User>(entity =>
             {
-                entity.HasMany(a => a.Activities)
-                .WithMany(b => b.ActivitiesUsers);
+                entity.HasMany(a => a.AttendedActivities)
+                .WithMany(b => b.AttendedUsers);
+
+                entity.HasOne(a => a.Role)
+                .WithMany(b => b.RoleUsers)
+                .HasForeignKey(a => a.RoleId);
             });
         }
 

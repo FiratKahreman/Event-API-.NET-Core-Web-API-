@@ -7,6 +7,6 @@ namespace task2_FiratKahreman.Models
         public int CityId { get; set; }
         public string CityName { get; set; }
 
-        public List<Activity> ActivitiesCities { get; set; }
+        public List<Activity> CityActivities { get; set; }
     }
 }

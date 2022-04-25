@@ -1,10 +1,12 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 
 namespace task2_FiratKahreman.Models
 {
     public class Role
-    {
-        [Key]
-        public string SystemRole { get; set; }
+    {        
+        public string RoleId { get; set; }
+
+        public List<User> RoleUsers { get; set; }
     }
 }

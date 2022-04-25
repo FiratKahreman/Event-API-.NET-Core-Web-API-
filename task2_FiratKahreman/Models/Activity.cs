@@ -21,8 +21,8 @@ namespace task2_FiratKahreman.Models
 
         public City City { get; set; }
         public Category Category { get; set; }
-        public List<User> ActivitiesUsers { get; set; }
-        public List<Company> Companies { get; set; }
+        public List<User> AttendedUsers { get; set; }
+        public List<Company> SellerCompanies { get; set; }
         
     }
 }
