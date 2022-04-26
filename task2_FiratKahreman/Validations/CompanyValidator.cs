@@ -8,10 +8,10 @@ namespace task2_FiratKahreman.Validations
     {
         public CompanyValidator()
         {
-            RuleFor(a => a.CompanyName).NotEmpty().WithMessage("Şirket ismi boş bırakılamaz!");
-            RuleFor(a => a.CompanyWeb).NotEmpty().WithMessage("Şirket web adresi boş bırakılamaz!");
+            RuleFor(a => a.CompanyName).NotEmpty().WithMessage("Lütfen şirket ismini giriniz");
+            RuleFor(a => a.CompanyWeb).NotEmpty().WithMessage("Lütfen şirket web sitesi adresini giriniz");
             RuleFor(a => a.CompanyMail)
-                .EmailAddress().WithMessage("Mail boş bırakılamaz!").When(a => !string.IsNullOrEmpty(a.CompanyMail));
+                .EmailAddress().WithMessage("Lütfen şirket iletişim mail adresini giriniz").When(a => !string.IsNullOrEmpty(a.CompanyMail));
             RuleFor(a => a.CompanyPassword).NotEmpty()
                 .Must(IsPasswordValid)
                 .WithMessage("Şifre en az 8 karakter, harf ve sayı içermelidir!");

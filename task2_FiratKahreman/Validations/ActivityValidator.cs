@@ -7,12 +7,14 @@ namespace task2_FiratKahreman.Validations
     {
         public ActivityValidator()
         {
-            RuleFor(a => a.ActivityName).NotEmpty().WithMessage("Aktivite ismi boş bırakılamaz!");
-            RuleFor(a => a.Description).NotEmpty().WithMessage("Açıklama boş bırakılamaz!");
-            RuleFor(a => a.Adress).NotEmpty().WithMessage("Adres boş bırakılamaz!");
-            RuleFor(a => a.Limit).NotEmpty().WithMessage("Kontenjan boş bırakılamaz!");
-            //RuleFor(a => a.City).NotEmpty().WithMessage("Şehir boş bırakılamaz!");
-            RuleFor(a => a.NeedTicket).NotEmpty().WithMessage("Etkinliğin biletli mi biletsiz mi olacağını seçiniz!");
+            RuleFor(a => a.ActivityName).NotEmpty().WithMessage("Lütfen etkinlik ismini giriniz");
+            RuleFor(a => a.Description).NotEmpty().WithMessage("Lütfen etkinlik açıklamasını giriniz");
+            RuleFor(a => a.ActivityDate).NotEmpty().WithMessage("Lütfen etkinlik tarihini giriniz");
+            RuleFor(a => a.Adress).NotEmpty().WithMessage("Lütfen etkinlik adresini giriniz");
+            RuleFor(a => a.Limit).NotEmpty().WithMessage("Lütfen etkinlik kontenjanını giriniz");
+            //RuleFor(a => a.City).NotEmpty().WithMessage("Lütfen etkinliğin yapılacağı şehri giriniz");
+            //RuleFor(a => a.Category).NotEmpty().WithMessage("Lütfen etkinlik kategorisini giriniz");
+            //RuleFor(a => a.NeedTicket).NotEmpty().WithMessage("Lütfen etkinliğin biletli mi biletsiz mi olacağını seçiniz.");
             RuleFor(a => a.TicketPrice).NotEmpty().WithMessage("Biletli etkinliklerde bilet fiyatı boş bırakılamaz!").When(a => a.NeedTicket == true);
         }
     }

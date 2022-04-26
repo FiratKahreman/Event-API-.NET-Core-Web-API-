@@ -31,13 +31,6 @@ namespace task2_FiratKahreman.Models
                 entity.HasMany(a => a.AttendedUsers)
                 .WithMany(b => b.AttendedActivities);                
             });
-
-
-            modelBuilder.Entity<User>(entity =>
-            {
-                entity.HasMany(a => a.AttendedActivities)
-                .WithMany(b => b.AttendedUsers);
-            });
         }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)

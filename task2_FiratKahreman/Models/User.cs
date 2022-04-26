@@ -11,7 +11,6 @@ namespace task2_FiratKahreman.Models
         public string Password { get; set; }
         public string RePassword { get; set; }
         public bool IsOrganizer { get; set; }
-        public string RoleId { get; set; }
 
         public List<Activity> AttendedActivities { get; set; }
     }

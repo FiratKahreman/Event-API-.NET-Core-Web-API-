@@ -65,9 +65,6 @@ namespace task2_FiratKahreman.Migrations
                     b.Property<string>("Adress")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("Booked")
-                        .HasColumnType("int");
-
                     b.Property<int>("CategoryId")
                         .HasColumnType("int");
 
@@ -80,8 +77,8 @@ namespace task2_FiratKahreman.Migrations
                     b.Property<string>("Description")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<DateTime>("LastDate")
-                        .HasColumnType("datetime2");
+                    b.Property<bool?>("IsActive")
+                        .HasColumnType("bit");
 
                     b.Property<int>("Limit")
                         .HasColumnType("int");
@@ -158,16 +155,6 @@ namespace task2_FiratKahreman.Migrations
                     b.ToTable("Companies");
                 });
 
-            modelBuilder.Entity("task2_FiratKahreman.Models.Role", b =>
-                {
-                    b.Property<string>("RoleId")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.HasKey("RoleId");
-
-                    b.ToTable("Roles");
-                });
-
             modelBuilder.Entity("task2_FiratKahreman.Models.User", b =>
                 {
                     b.Property<int>("UserId")
@@ -190,15 +177,10 @@ namespace task2_FiratKahreman.Migrations
                     b.Property<string>("RePassword")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("RoleId")
-                        .HasColumnType("nvarchar(450)");
-
                     b.Property<string>("Surname")
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("UserId");
-
-                    b.HasIndex("RoleId");
 
                     b.ToTable("Users");
                 });
@@ -252,15 +234,6 @@ namespace task2_FiratKahreman.Migrations
                     b.Navigation("City");
                 });
 
-            modelBuilder.Entity("task2_FiratKahreman.Models.User", b =>
-                {
-                    b.HasOne("task2_FiratKahreman.Models.Role", "Role")
-                        .WithMany("RoleUsers")
-                        .HasForeignKey("RoleId");
-
-                    b.Navigation("Role");
-                });
-
             modelBuilder.Entity("task2_FiratKahreman.Models.Category", b =>
                 {
                     b.Navigation("CategoryActivities");
@@ -269,11 +242,6 @@ namespace task2_FiratKahreman.Migrations
             modelBuilder.Entity("task2_FiratKahreman.Models.City", b =>
                 {
                     b.Navigation("CityActivities");
-                });
-
-            modelBuilder.Entity("task2_FiratKahreman.Models.Role", b =>
-                {
-                    b.Navigation("RoleUsers");
                 });
 #pragma warning restore 612, 618
         }

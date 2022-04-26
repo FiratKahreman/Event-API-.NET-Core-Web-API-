@@ -8,18 +8,15 @@ namespace task2_FiratKahreman.Validations
     {
         public UserValidator()
         {
-            RuleFor(a => a.Name).NotEmpty().WithMessage("İsim boş bırakılamaz!");
-            RuleFor(a => a.Surname).NotEmpty().WithMessage("İsim boş bırakılamaz!");
+            RuleFor(a => a.Name).NotEmpty().WithMessage("Lütfen isminizi giriniz");
+            RuleFor(a => a.Surname).NotEmpty().WithMessage("Lütfen soyadınızı giriniz");
             RuleFor(a => a.Mail)
-                .EmailAddress().WithMessage("Mail boş bırakılamaz!").When(a => !string.IsNullOrEmpty(a.Mail));
+                .EmailAddress().WithMessage("Lütfen mail adresinizi giriniz").When(a => !string.IsNullOrEmpty(a.Mail));
             RuleFor(a => a.Password).NotEmpty()
                 .Must(IsPasswordValid)
                 .WithMessage("Şifre en az 8 karakter, harf ve sayı içermelidir!");
             RuleFor(a => a.RePassword)
-                .Equal(a => a.RePassword).WithMessage("Girilen şifreler aynı olmalıdır!");
-            RuleFor(a => a.Role).NotEmpty().WithMessage("Lütfen üye tipini seçiniz.");
-
-            
+                .Equal(a => a.RePassword).WithMessage("Girilen şifreler aynı olmalıdır!");            
         }
         private bool IsPasswordValid(string arg)
         {

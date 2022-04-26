@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using System;
 using System.Collections.Generic;
@@ -16,6 +17,12 @@ namespace task2_FiratKahreman.Controllers
     [ApiController]
     public class UserController : ControllerBase
     {
+        public IConfiguration _configuration { get; set; }
+
+        public UserController(IConfiguration configuration)
+        {
+            _configuration = configuration;
+        }
 
         [HttpPost]
         public IActionResult SignUp(User user)
@@ -32,6 +39,27 @@ namespace task2_FiratKahreman.Controllers
         [HttpGet]
         public IActionResult Login(string mail, string password, bool isOrganizer)
         {
+            if (mail == "admin@etkinlik.com" && password == "sifremcokzor")
+            {
+                List<Claim> claims = new List<Claim>();
+                claims.Add(new Claim(JwtRegisteredClaimNames.Email, mail));
+                claims.Add(new Claim(ClaimTypes.Role, "Admin"));
+                JwtSecurityTokenHandler tokenHandler = new JwtSecurityTokenHandler();
+                SymmetricSecurityKey key = new SymmetricSecurityKey(Convert.FromBase64String
+                    (_configuration["JwtOptions:key"]));
+                SigningCredentials signingCredentials = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
+                JwtSecurityToken token = new JwtSecurityToken(
+                    issuer: "www.etkinlik.com",
+                    audience: "www.etkinlik.com",
+                    signingCredentials: signingCredentials,
+                    expires: DateTime.Now.AddHours(2),
+                    claims: claims
+                    );
+                string adminToken = tokenHandler.WriteToken(token);
+
+                return Ok(adminToken);
+            }
+
             using (var context = new EventContext())
             {
                 var query = from a in context.Users
@@ -41,14 +69,14 @@ namespace task2_FiratKahreman.Controllers
                             select a;
 
                 if (query != null)
-                {                                                         
+                {
                     List<Claim> claims = new List<Claim>();
                     claims.Add(new Claim(JwtRegisteredClaimNames.Email, mail));
-                    claims.Add(new Claim(ClaimTypes.Role, isOrganizer?"Organizer":"User"));                  
-                    
+                    claims.Add(new Claim(ClaimTypes.Role, (isOrganizer? "Organizer" : "User")));
+
                     JwtSecurityTokenHandler tokenHandler = new JwtSecurityTokenHandler();
                     SymmetricSecurityKey key = new SymmetricSecurityKey(Convert.FromBase64String
-                        ("dandanlangididandansamsakdovecii"));
+                        (_configuration["JwtOptions:key"]));
                     SigningCredentials signingCredentials = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
                     JwtSecurityToken token = new JwtSecurityToken(
                         issuer: "www.etkinlik.com",
@@ -98,7 +126,7 @@ namespace task2_FiratKahreman.Controllers
 
                     JwtSecurityTokenHandler tokenHandler = new JwtSecurityTokenHandler();
                     SymmetricSecurityKey key = new SymmetricSecurityKey(Convert.FromBase64String
-                        ("dandanlangididandansamsakdovecii"));
+                        (_configuration["JwtOptions:key"]));
                     SigningCredentials signingCredentials = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
                     JwtSecurityToken token = new JwtSecurityToken(
                         issuer: "www.etkinlik.com",

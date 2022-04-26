@@ -12,27 +12,28 @@ namespace task2_FiratKahreman.Controllers
     [Route("api/[controller]/[action]")]
     [ApiController]
     public class EventController : ControllerBase
-    {
-        
+    {        
         [HttpGet]
         [Authorize(Roles = "User")]
         public IActionResult GetEvents()
         {
-            EventContext context = new EventContext();
-            List<ActivityDTO> activities = context.Activities
-                .Select(c => new ActivityDTO()
-                {
-                    ActivityId = c.ActivityId,
-                    ActivityDate = c.ActivityDate,
-                    ActivityName = c.ActivityName,
-                    Description = c.Description,
-                    LastDate = c.LastDate,
-                    Adress = c.Adress,
-                    Limit = c.Limit,
-                    NeedTicket = c.NeedTicket,
-                    TicketPrice = c.TicketPrice
-                }).ToList();
-            return Ok(activities);
+            using (var context = new EventContext())
+            {
+                List<ActivityDTO> activities = context.Activities
+                    .Where(a => a.IsActive == true)
+                    .Select(c => new ActivityDTO()
+                    {
+                        ActivityId = c.ActivityId,
+                        ActivityDate = c.ActivityDate,
+                        ActivityName = c.ActivityName,
+                        Description = c.Description,
+                        Adress = c.Adress,
+                        Limit = c.Limit,
+                        NeedTicket = c.NeedTicket,
+                        TicketPrice = c.TicketPrice
+                    }).ToList();
+                return Ok(activities);
+            }
         }
 
         [HttpGet("{id}")]
@@ -48,7 +49,7 @@ namespace task2_FiratKahreman.Controllers
        
         [HttpGet("{id}")]
         [Authorize(Roles = "User")]
-        public IActionResult GetListByCity(int cityId)
+        public IActionResult GetEventsByCity(int cityId)
         {
             using (var context = new EventContext())
             {
@@ -59,7 +60,7 @@ namespace task2_FiratKahreman.Controllers
         
         [HttpGet("{id}")]
         [Authorize(Roles = "User")]
-        public IActionResult GetListByCategory(int categoryId)
+        public IActionResult GetEventsByCategory(int categoryId)
         {
             using (var context = new EventContext())
             {
@@ -80,7 +81,7 @@ namespace task2_FiratKahreman.Controllers
             }
         }
 
-        [HttpGet]
+        [HttpGet("{id}")]
         [Authorize(Roles = "Organizer")]
         public IActionResult CancelEvent(int eventId)
         {
@@ -91,7 +92,7 @@ namespace task2_FiratKahreman.Controllers
                 if (query != null)
                 {
                     Activity activity = context.Activities.SingleOrDefault(a => a.ActivityId == eventId);
-                    context.Activities.Remove(activity);
+                    activity.IsActive = false;
                     context.SaveChanges();
                     return Ok();
                 }
@@ -104,15 +105,15 @@ namespace task2_FiratKahreman.Controllers
 
         [HttpGet]
         [Authorize(Roles = "Organizer")]
-        public IActionResult EditLimit(int eventId, Activity activity)
+        public IActionResult EditLimit(int eventId, int newLimit)
         {
             using (var context = new EventContext())
             {
                 var query = (from c in context.Activities where c.ActivityId == eventId && c.ActivityDate >= DateTime.Now.AddDays(5) select c);
                 if (query != null)
                 {
-                    Activity original = context.Activities.SingleOrDefault(a => a.ActivityId == eventId);                    
-                    original.Limit = activity.Limit;
+                    Activity activity = context.Activities.SingleOrDefault(a => a.ActivityId == eventId);                    
+                    activity.Limit = newLimit;
                     context.SaveChanges();
                     return Ok();
                 }
@@ -125,15 +126,15 @@ namespace task2_FiratKahreman.Controllers
 
         [HttpGet]
         [Authorize(Roles = "Organizer")]
-        public IActionResult EditAdress(int eventId, Activity activity)
+        public IActionResult EditAdress(int eventId, string newAdress)
         {
             using (var context = new EventContext())
             {
                 var query = (from c in context.Activities where c.ActivityId == eventId && c.ActivityDate <= DateTime.Now.AddDays(-5) select c);
                 if (query != null)
                 {
-                    Activity original = context.Activities.SingleOrDefault(a => a.ActivityId == eventId);
-                    original.Adress = activity.Adress;
+                    Activity activity = context.Activities.SingleOrDefault(a => a.ActivityId == eventId);
+                    activity.Adress = newAdress;
                     context.SaveChanges();
                     return Ok();
                 }

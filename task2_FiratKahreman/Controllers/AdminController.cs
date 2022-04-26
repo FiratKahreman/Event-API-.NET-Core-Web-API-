@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Linq;
 using task2_FiratKahreman.Models;
@@ -11,9 +12,9 @@ namespace task2_FiratKahreman.Controllers
     {
 
         //EDIT KALDI
-
-
+                
         [HttpPost]
+        [Authorize(Roles = "Admin")]
         public IActionResult AddCategory(Category category)
         {
             using (var context = new EventContext())
@@ -25,6 +26,7 @@ namespace task2_FiratKahreman.Controllers
         }
 
         [HttpDelete("{id}")]
+        [Authorize(Roles = "Admin")]
         public IActionResult DeleteCategory(int id)
         {
             using (var context = new EventContext())
@@ -34,11 +36,10 @@ namespace task2_FiratKahreman.Controllers
                 context.SaveChanges();
                 return Ok();
             }
-        }
-
-        
+        }        
 
         [HttpPost]
+        [Authorize(Roles = "Admin")]
         public IActionResult AddCity(City city)
         {
             using(var context = new EventContext())
