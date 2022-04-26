@@ -99,6 +99,8 @@ namespace task2_FiratKahreman.Controllers
             }         
         }
 
+        
+
         //Katıldıklarını, katılmadıklarını, iptal edilenleri gör
 
 

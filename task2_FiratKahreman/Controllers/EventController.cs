@@ -48,6 +48,7 @@ namespace task2_FiratKahreman.Controllers
         }                
        
         [HttpGet("{id}")]
+        [Route("filter/city")]
         [Authorize(Roles = "User")]
         public IActionResult GetEventsByCity(int cityId)
         {
@@ -58,7 +59,8 @@ namespace task2_FiratKahreman.Controllers
             }
         }
         
-        [HttpGet("{id}")]
+        [HttpGet]
+        [Route("filter/category/{categoryId}")]  //deneysel
         [Authorize(Roles = "User")]
         public IActionResult GetEventsByCategory(int categoryId)
         {
@@ -81,18 +83,19 @@ namespace task2_FiratKahreman.Controllers
             }
         }
 
-        [HttpGet("{id}")]
+        [HttpGet]
         [Authorize(Roles = "Organizer")]
-        public IActionResult CancelEvent(int eventId)
+        public IActionResult CancelEvent(int eventId, bool isActive)
         {
             using (var context = new EventContext())
-            {                
-                var query = (from c in context.Activities where c.ActivityId == eventId && c.ActivityDate >= DateTime.Now.AddDays(5) select c);
-                
+            {
+                var query = context.Activities
+                    .Where(q => q.ActivityId == eventId && q.ActivityDate >= DateTime.Now.AddDays(5))
+                    .FirstOrDefault();
                 if (query != null)
                 {
                     Activity activity = context.Activities.SingleOrDefault(a => a.ActivityId == eventId);
-                    activity.IsActive = false;
+                    activity.IsActive = isActive;
                     context.SaveChanges();
                     return Ok();
                 }
@@ -109,7 +112,9 @@ namespace task2_FiratKahreman.Controllers
         {
             using (var context = new EventContext())
             {
-                var query = (from c in context.Activities where c.ActivityId == eventId && c.ActivityDate >= DateTime.Now.AddDays(5) select c);
+                var query = context.Activities
+                    .Where(q => q.ActivityId == eventId && q.ActivityDate >= DateTime.Now.AddDays(5))                    
+                    .FirstOrDefault();
                 if (query != null)
                 {
                     Activity activity = context.Activities.SingleOrDefault(a => a.ActivityId == eventId);                    
@@ -130,7 +135,9 @@ namespace task2_FiratKahreman.Controllers
         {
             using (var context = new EventContext())
             {
-                var query = (from c in context.Activities where c.ActivityId == eventId && c.ActivityDate <= DateTime.Now.AddDays(-5) select c);
+                var query = context.Activities
+                    .Where(q => q.ActivityId == eventId && q.ActivityDate >= DateTime.Now.AddDays(5))
+                    .FirstOrDefault();
                 if (query != null)
                 {
                     Activity activity = context.Activities.SingleOrDefault(a => a.ActivityId == eventId);

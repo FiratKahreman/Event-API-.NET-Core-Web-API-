@@ -70,9 +70,10 @@ namespace task2_FiratKahreman.Controllers
 
                 if (query != null)
                 {
+                    var orgstat = isOrganizer? "Organizer" : "User";
                     List<Claim> claims = new List<Claim>();
                     claims.Add(new Claim(JwtRegisteredClaimNames.Email, mail));
-                    claims.Add(new Claim(ClaimTypes.Role, (isOrganizer? "Organizer" : "User")));
+                    claims.Add(new Claim(ClaimTypes.Role, orgstat));
 
                     JwtSecurityTokenHandler tokenHandler = new JwtSecurityTokenHandler();
                     SymmetricSecurityKey key = new SymmetricSecurityKey(Convert.FromBase64String
