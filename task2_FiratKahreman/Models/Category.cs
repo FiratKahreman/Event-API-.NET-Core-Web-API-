@@ -1,10 +1,11 @@
 ﻿using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 
 namespace task2_FiratKahreman.Models
 {
     public class Category
     {
-        public int CategoryId { get; set; }
+        [Key]
         public string CategoryName { get; set; }
 
         public List<Activity> CategoryActivities { get; set; }

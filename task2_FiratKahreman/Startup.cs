@@ -12,6 +12,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using System.IO;
 using task2_FiratKahreman.Models;
 
 namespace task2_FiratKahreman
@@ -27,7 +28,7 @@ namespace task2_FiratKahreman
         
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddControllers();
+            services.AddControllers().AddXmlDataContractSerializerFormatters();
             services.AddFluentValidation(a => a.RegisterValidatorsFromAssemblyContaining<Startup>());
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                 .AddJwtBearer(options =>
@@ -55,11 +56,13 @@ namespace task2_FiratKahreman
             {
                 app.UseDeveloperExceptionPage();
             }
-            app.UseAuthentication();
+
+            app.UseAuthentication();            
 
             app.UseRouting();
 
             app.UseAuthorization();
+            
 
             app.UseEndpoints(endpoints => endpoints.MapControllers());
         }

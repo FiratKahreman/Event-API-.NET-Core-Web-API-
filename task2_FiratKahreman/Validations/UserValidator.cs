@@ -16,7 +16,7 @@ namespace task2_FiratKahreman.Validations
                 .Must(IsPasswordValid)
                 .WithMessage("Şifre en az 8 karakter, harf ve sayı içermelidir!");
             RuleFor(a => a.RePassword)
-                .Equal(a => a.RePassword).WithMessage("Girilen şifreler aynı olmalıdır!");            
+                .Equal(a => a.Password).WithMessage("Girilen şifreler aynı olmalıdır!");            
         }
         private bool IsPasswordValid(string arg)
         {

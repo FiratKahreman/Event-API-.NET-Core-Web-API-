@@ -19,11 +19,11 @@ namespace task2_FiratKahreman.Models
             {
                 entity.HasOne(a => a.Category)
                 .WithMany(b => b.CategoryActivities)
-                .HasForeignKey(a => a.CategoryId);
+                .HasForeignKey(a => a.CategoryName);
 
                 entity.HasOne(a => a.City)
                 .WithMany(b => b.CityActivities)
-                .HasForeignKey(a => a.CityId);
+                .HasForeignKey(a => a.CityName);
 
                 entity.HasMany(a => a.SellerCompanies)
                 .WithMany(b => b.CompanyActivities);

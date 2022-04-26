@@ -15,8 +15,8 @@ namespace task2_FiratKahreman.Models
         public bool NeedTicket { get; set; }
         public int CompanyId { get; set; }
         public int? TicketPrice { get; set; }
-        public int CategoryId { get; set; }
-        public int CityId { get; set; }
+        public string CategoryName { get; set; }
+        public string CityName { get; set; }
 
         public City City { get; set; }
         public Category Category { get; set; }

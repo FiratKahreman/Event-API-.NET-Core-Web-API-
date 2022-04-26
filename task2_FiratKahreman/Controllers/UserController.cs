@@ -29,9 +29,20 @@ namespace task2_FiratKahreman.Controllers
         {
             using (var context = new EventContext())
             {
-                var newuser = context.Add(user);
-                context.SaveChanges();
-                return Ok();
+                var query = (from c in context.Users 
+                             where c.Mail == user.Mail 
+                             select c);
+                if(query != null)
+                {
+                    return BadRequest("Bu mail adresi daha önceden tanımlıdır!");
+                }
+                else
+                {
+                    var newuser = context.Add(user);
+                    context.SaveChanges();
+                    return Ok();
+                }
+                
             }
 
         }
@@ -70,10 +81,9 @@ namespace task2_FiratKahreman.Controllers
 
                 if (query != null)
                 {
-                    var orgstat = isOrganizer? "Organizer" : "User";
                     List<Claim> claims = new List<Claim>();
                     claims.Add(new Claim(JwtRegisteredClaimNames.Email, mail));
-                    claims.Add(new Claim(ClaimTypes.Role, orgstat));
+                    claims.Add(new Claim(ClaimTypes.Role, isOrganizer ? "Organizer" : "User"));
 
                     JwtSecurityTokenHandler tokenHandler = new JwtSecurityTokenHandler();
                     SymmetricSecurityKey key = new SymmetricSecurityKey(Convert.FromBase64String
@@ -102,9 +112,20 @@ namespace task2_FiratKahreman.Controllers
         {
             using (var context = new EventContext())
             {
-                var newcompanyuser = context.Add(company);
-                context.SaveChanges();
-                return Ok();
+                var query = (from c in context.Companies
+                             where c.CompanyMail == company.CompanyMail
+                             select c);
+                if (query != null)
+                {
+                    return BadRequest("Bu mail adresi daha önceden tanımlıdır!");
+                }
+                else
+                {
+                    var newcompanyuser = context.Add(company);
+                    context.SaveChanges();
+                    return Ok();
+                }
+                
             }
 
         }

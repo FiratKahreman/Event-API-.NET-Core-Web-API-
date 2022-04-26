@@ -9,29 +9,36 @@ namespace task2_FiratKahreman.Controllers
     [Route("api/[controller]/[action]")]
     [ApiController]
     public class AdminController : ControllerBase
-    {
-
-        //EDIT KALDI
-                
+    {                
         [HttpPost]
         [Authorize(Roles = "Admin")]
         public IActionResult AddCategory(Category category)
         {
             using (var context = new EventContext())
             {
-                context.Categories.Add(category);
-                context.SaveChanges();
-                return Ok();
+                var query = (from c in context.Categories
+                             where c.CategoryName == category.CategoryName
+                             select c);
+                if (query == null)
+                {
+                    context.Categories.Add(category);
+                    context.SaveChanges();
+                    return Ok();
+                }
+                else
+                {
+                    return BadRequest("Aynı isme sahip bir kategori mevcut.");
+                }
             }
         }
 
         [HttpDelete("{id}")]
         [Authorize(Roles = "Admin")]
-        public IActionResult DeleteCategory(int id)
+        public IActionResult DeleteCategory(string name)
         {
             using (var context = new EventContext())
             {
-                Category category = context.Categories.SingleOrDefault(a => a.CategoryId == id);
+                Category category = context.Categories.SingleOrDefault(a => a.CategoryName == name);
                 context.Categories.Remove(category);
                 context.SaveChanges();
                 return Ok();
@@ -44,11 +51,20 @@ namespace task2_FiratKahreman.Controllers
         {
             using(var context = new EventContext())
             {
-                context.Cities.Add(city);
-                context.SaveChanges();
-                return Ok();
+                var query = (from c in context.Cities
+                             where c.CityName == city.CityName
+                             select c);
+                if (query == null)
+                {
+                    context.Cities.Add(city);
+                    context.SaveChanges();
+                    return Ok();
+                }
+                else
+                {
+                    return BadRequest("Aynı isme sahip bir şehir mevcut.");
+                }
             }
-        }
-        
+        }        
     }
 }

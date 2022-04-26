@@ -99,10 +99,29 @@ namespace task2_FiratKahreman.Controllers
             }         
         }
 
+        [HttpGet("{userId}")]
+        [Authorize(Roles = "User")]
+        public IActionResult EventsIAttend(int userId)
+        {
+            using (var context = new EventContext())
+            {
+                var user = context.Users.First(a => a.UserId == userId);
+                var query = (from c in context.Activities where c.AttendedUsers.Contains(user)  select c).ToList();
+                return Ok(query);
+
+            }
+        }
+
+        [HttpGet]
+        [Authorize(Roles = "User")]
+        public IActionResult EventsCancelled()
+        {
+            using (var context = new EventContext())
+            {
+                var query = (from c in context.Activities where c.IsActive == false select c).ToList();
+                return Ok(query);
+            }
+        }      
         
-
-        //Katıldıklarını, katılmadıklarını, iptal edilenleri gör
-
-
     }
 }
